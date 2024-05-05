@@ -1,0 +1,22 @@
+<ng-container *ngIf="(gameData$ | async) as gameData">
+	<ol *ngIf="{max: (maxSelectableAmount$ | async) ?? 1, selected: (selectedAmount$ | async) ?? 1, matches: (numMatches$ | async)} as currRoundData">
+			<li *ngFor="let m of currRoundData.matches; index as i">
+				<app-nim-single-match
+				[selectable]="(gameData$ | async)?.currentPlayer === ePlayer.Player && i >= (gameData.numMatchesLeft - currRoundData.max) && i < (gameData.numMatchesLeft)"
+				[selected]="i >= (gameData.numMatchesLeft - currRoundData.selected) && i < (gameData.numMatchesLeft)"
+				[taken]="i >= (gameData.numMatchesLeft)"
+				(onSelect)="setSelectedAmount((gameData.numMatchesLeft) - i)"
+				></app-nim-single-match>
+			</li>
+
+	</ol>
+	<ng-container [ngSwitch]="(gameData$ | async)?.currentPlayer">
+		<ng-container *ngSwitchCase="ePlayer.Computer">
+			Wait for the computer to finish this round&hellip;
+		</ng-container>
+		<ng-container *ngSwitchCase="ePlayer.Player">
+			<button type="button" (click)="submitSelection()">Submit Selection</button>
+		</ng-container>
+	</ng-container>
+
+</ng-container>

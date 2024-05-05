@@ -1,0 +1,17 @@
+<div>
+	<h3>Game Over</h3>
+
+	<ng-container [ngSwitch]="(gameData$ | async)?.winner">
+		<ng-container *ngSwitchCase="ePlayer.Computer">
+			<h1>You lose!</h1>
+			You removed the last match from the game.
+		</ng-container>
+		<ng-container *ngSwitchCase="ePlayer.Player">
+			<h1>You won!</h1>
+			The computer removed the last match from the game.
+		</ng-container>
+	</ng-container>
+
+	<button type="button" (click)="endGame()">Return to the main menu</button>
+
+</div>

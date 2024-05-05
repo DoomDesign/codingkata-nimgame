@@ -1,0 +1,6 @@
+<button
+type="button"
+[disabled]="!selectable"
+[class.taken]="!!taken"
+(click)="select()"
+>Match <span *ngIf="!!selected">(selected)</span></button>
