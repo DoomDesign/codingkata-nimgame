@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { NimGamePlayerUiComponent } from './nim-game-player-ui.component';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 describe('NimGamePlayerUiComponent', () => {
   let component: NimGamePlayerUiComponent;
@@ -8,6 +9,9 @@ describe('NimGamePlayerUiComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
+      imports: [
+				NoopAnimationsModule
+			],
       declarations: [NimGamePlayerUiComponent]
     });
     fixture = TestBed.createComponent(NimGamePlayerUiComponent);
