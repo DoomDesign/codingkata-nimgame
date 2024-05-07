@@ -1,17 +1,22 @@
-<div>
-	<h3>Game Over</h3>
+<dialog #dialog class="modal modal-bottom sm:modal-middle backdrop-blur">
+	<div class="modal-box">
+		<div class="flex flex-col items-center text-center gap-4">
+			<h3 class="tracking-widest font-bold uppercase text-2xl">Game Over</h3>
 
-	<ng-container [ngSwitch]="(gameData$ | async)?.winner">
-		<ng-container *ngSwitchCase="ePlayer.Computer">
-			<h1>You lose!</h1>
-			You removed the last match from the game.
-		</ng-container>
-		<ng-container *ngSwitchCase="ePlayer.Player">
-			<h1>You won!</h1>
-			The computer removed the last match from the game.
-		</ng-container>
-	</ng-container>
+			<ng-container [ngSwitch]="(gameData$ | async)?.winner">
+				<ng-container *ngSwitchCase="ePlayer.Computer">
+					<h2 class="text-6xl font-bold">You lose!</h2>
+					You removed the last match from the game.
+				</ng-container>
+				<ng-container *ngSwitchCase="ePlayer.Player">
+					<h2 class="text-6xl font-bold">You win!</h2>
+					The computer removed the last match from the game.
+				</ng-container>
+			</ng-container>
 
-	<button type="button" (click)="endGame()">Return to the main menu</button>
+			<button class="btn btn-lg btn-neutral mt-8" type="button" (click)="endGame()">Return to the main menu</button>
+		</div>
 
-</div>
+
+	</div>
+</dialog>

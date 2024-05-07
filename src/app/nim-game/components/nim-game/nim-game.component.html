@@ -1,10 +1,12 @@
-<ng-container *ngIf="(gameData$ | async) as gameData">
-	<!-- Start Screen -->
-	<app-nim-game-start *ngIf="gameData.currentGameState === eNimGameState.Start"></app-nim-game-start>
+<div class="h-screen w-screen px-8 flex items-center justify-center gradient bg-gradient-to-b from-slate-300 via-slate-50 to-slate-200">
+	<ng-container *ngIf="(gameData$ | async) as gameData">
+		<!-- Start Screen -->
+		<app-nim-game-start class="block h-full" *ngIf="gameData.currentGameState === eNimGameState.Start"></app-nim-game-start>
 
-	<!-- Active Game, display while running and when ended -->
-	<app-nim-game-active-game *ngIf="gameData.currentGameState === eNimGameState.Running || gameData.currentGameState === eNimGameState.Ended"></app-nim-game-active-game>
+		<!-- Active Game, display while running and when ended -->
+		<app-nim-game-active-game *ngIf="gameData.currentGameState === eNimGameState.Running || gameData.currentGameState === eNimGameState.Ended"></app-nim-game-active-game>
 
-	<!-- End Result Overlay -->
-	<app-nim-game-end *ngIf="gameData.currentGameState === eNimGameState.Ended"></app-nim-game-end>
-</ng-container>
+		<!-- End Result Overlay -->
+		<app-nim-game-end *ngIf="gameData.currentGameState === eNimGameState.Ended"></app-nim-game-end>
+	</ng-container>
+</div>

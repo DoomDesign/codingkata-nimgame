@@ -1,22 +1,25 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, delay, filter, takeWhile } from 'rxjs';
-import { NimGame, NimGameState, Player } from '../interfaces/nim-game';
+import { NimGame, NimGameDifficulty, NimGameState, Player } from '../interfaces/nim-game';
 
 @Injectable({
   providedIn: 'root'
 })
 export class NimGameService {
 
+
 	private _defaultNimGameData: NimGame = {
 		gameRules: {
 			numTotalMatches: 13,
 			minSelectableMatches: 1,
-			maxSelectableMatches: 3
+			maxSelectableMatches: 3,
 		},
+		computerDifficulty: NimGameDifficulty.Normal,
 		currentGameState: NimGameState.Start,
 		currentRound: 1,
 		currentPlayer: Player.Player,
 		winner: null,
+		lastAmountTaken: 0,
 		numMatchesLeft: 13,
 		playerStats: {
 			'PLAYER': {
@@ -27,6 +30,7 @@ export class NimGameService {
 			}
 		}
 	}
+
 
 	private _gameData !: BehaviorSubject<NimGame>;
 
@@ -46,6 +50,12 @@ export class NimGameService {
 		}
 	}
 
+	public setDifficulty(newDifficulty: NimGameDifficulty) {
+		this.updateGame({
+			computerDifficulty: newDifficulty
+		})
+	}
+
 	public startGame() {
 		this.updateGame({
 			currentGameState: NimGameState.Running
@@ -61,6 +71,8 @@ export class NimGameService {
 			..._currGameData,
 			...updatedGameData
 		});
+
+		console.log({gameData: this._gameData.getValue()});
 	}
 
 	public getGameData$(): Observable<NimGame> {
@@ -82,6 +94,8 @@ export class NimGameService {
 		}
 
 		const _updatedGameData = { ...this._gameData.getValue() };
+
+		_updatedGameData.lastAmountTaken = numMatchesToTake;
 
 		_updatedGameData.numMatchesLeft = Math.max(0, _updatedGameData.numMatchesLeft - numMatchesToTake);
 
@@ -142,9 +156,21 @@ export class NimGameService {
 		).subscribe({
 			next: (gameData) => {
 
-				const _maxMatches = Math.min(gameData.numMatchesLeft, gameData.gameRules.maxSelectableMatches);
+				const _matchesLeft = gameData.numMatchesLeft;
+				const _maxMatches = Math.min(_matchesLeft, gameData.gameRules.maxSelectableMatches);
+				const _minMatches = gameData.gameRules.minSelectableMatches;
 
-				const matchesToTake = Math.floor( Math.random() * (_maxMatches - gameData.gameRules.minSelectableMatches) + gameData.gameRules.minSelectableMatches );
+				let matchesToTake = 0;
+
+				if(gameData.computerDifficulty === NimGameDifficulty.Hard) {
+					// calculate the optimum amount of matches to take
+					matchesToTake = Math.max(_minMatches , ((_matchesLeft % (_maxMatches + _minMatches)) + _maxMatches) % (_maxMatches + _minMatches));
+				}
+
+				// easy mode/fallback: choose randomly between the min and the max amount of matches
+				if(matchesToTake === 0) {
+					matchesToTake = Math.floor( Math.random() * (_maxMatches - gameData.gameRules.minSelectableMatches + 1) + gameData.gameRules.minSelectableMatches );
+				}
 
 				this.endCurrentRound(matchesToTake);
 			}
@@ -152,15 +178,6 @@ export class NimGameService {
 	}
 
 	public endGame() {
-		const _currGameData = this._gameData.getValue();
-		if(_currGameData.currentGameState !== NimGameState.Ended) {
-			let confirmEarlyExit = confirm("Do you really want to exit from the current game?")
-
-			if(!confirmEarlyExit) {
-				return;
-			}
-		}
-
 		this.resetGame();
 	}
 }

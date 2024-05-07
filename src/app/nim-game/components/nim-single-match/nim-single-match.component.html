@@ -1,6 +1,24 @@
 <button
 type="button"
+[attr.data-playable]="!!playable"
+[attr.data-taken]="!!taken"
+[attr.data-selected]="!!selected"
 [disabled]="!selectable"
-[class.taken]="!!taken"
 (click)="select()"
->Match <span *ngIf="!!selected">(selected)</span></button>
+class="match group"
+>
+	<svg class="" version="1.1"
+	xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 374.1 647"
+	enable-background="new 0 0 374.1 647" xml:space="preserve">
+		<g id="SVGRepo_iconCarrier">
+			<polyline fill="#F7B239" points="280.7,178 71,631.6 16.8,606.6 226.5,153 	"/>
+			<polyline fill="#E09B2D" points="280.7,178 71,631.6 46,620 255.7,166.5 	"/>
+			<path fill="#E03F20" d="M317.9,22.2c17,7.8,29.3,21.6,35.7,37.7c6.9,17.3,7,37.3-1.5,55.5c-16.3,35.2-72.5,81.9-107.7,65.7
+				c-27.6-12.7-34-60.3-27.7-97.3c1.7-10.2,4.5-19.7,8-27.3C241,21.2,282.7,5.9,317.9,22.2z"/>
+			<g>
+				<path fill="#FF3700" d="M317.9,22.2c17,7.8,29.3,21.6,35.7,37.7c-0.5,1.1-0.9,2.3-1.5,3.4c-16.3,35.2-72.5,81.9-107.7,65.7
+					c-15.2-7-24-24.6-27.7-45.2c1.7-10.2,4.5-19.7,8-27.3C241,21.2,282.7,5.9,317.9,22.2z"/>
+			</g>
+		</g>
+	</svg>
+</button>

@@ -1,0 +1,14 @@
+<div class="h-full">
+	<div class="h-full overflow-clip" [class.order-first]="playerToDisplay === ePlayer.Computer">
+		<div class="h-full flex flex-row items-end gap-2"
+		[@list]="(playerMatchesDrawn$ | async)?.length">
+			<app-nim-single-match
+				*ngFor="let m of (playerMatchesDrawn$ | async)"
+				[selectable]="false"
+				[selected]="false"
+				[taken]="false"
+				[playable]="false"
+			></app-nim-single-match>
+		</div>
+	</div>
+</div>

@@ -2,10 +2,19 @@ import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { BehaviorSubject, Observable, Subject, combineLatest, map, startWith, takeUntil, tap } from 'rxjs';
 import { Player, NimGame } from '../../interfaces/nim-game';
 import { NimGameService } from '../../services/nim-game.service';
+import { trigger, transition, query, stagger, animateChild } from '@angular/animations';
+import { I18nPluralPipe } from '@angular/common';
+import { listStaggerChildren } from '../../animations';
 @Component({
   selector: 'app-nim-game-active-game',
   templateUrl: './nim-game-active-game.component.html',
-  styleUrls: ['./nim-game-active-game.component.scss']
+  styleUrls: ['./nim-game-active-game.component.scss'],
+	animations: [
+		listStaggerChildren
+  ],
+	providers: [
+		I18nPluralPipe
+	]
 })
 export class NimGameActiveGameComponent implements OnInit, OnDestroy {
 
@@ -22,6 +31,14 @@ export class NimGameActiveGameComponent implements OnInit, OnDestroy {
 
 	private _selectedAmount: BehaviorSubject<number> = new BehaviorSubject<number>(0);
 	public selectedAmount$: Observable<number> = this._selectedAmount.asObservable();
+
+	public itemPluralMapping = {
+		'match': {
+			'=0': '0 matches',
+			'=1': '1 match',
+			'other': '# matches'
+		}
+	};
 
 	public numMatches$: Observable<Array<null>> = this.gameData$.pipe(
 		map(gameData => new Array( gameData.gameRules.numTotalMatches ).fill(null))

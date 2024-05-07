@@ -1,0 +1,10 @@
+<div class="flex flex-col gap-4 items-center" *ngIf="{
+	difficulty: (gameData$ | async)?.computerDifficulty
+} as difficultyData">
+	<span>Computer Difficulty:</span>
+	<div class="grid grid-cols-3 gap-4 items-center place-items-center">
+		<span [class.font-bold]="difficultyData.difficulty === eDifficulty.Normal">Normal</span>
+		<input type="checkbox" class="toggle" name="difficulty" [checked]="difficultyData.difficulty === eDifficulty.Hard" (change)="setDifficulty($event)" />
+		<span [class.font-bold]="difficultyData.difficulty === eDifficulty.Hard">Hard</span>
+	</div>
+</div>

@@ -7,6 +7,11 @@ export interface NimGamePlayerStats {
 	drawnMatches: number
 }
 
+export enum NimGameDifficulty {
+	Normal = 'NORMAL',
+	Hard = 'HARD'
+}
+
 export enum NimGameState {
 	Start = 'START',
 	Running = 'RUNNING',
@@ -16,14 +21,16 @@ export enum NimGameState {
 export interface NimGameRules {
 	numTotalMatches: number,
 	minSelectableMatches: number,
-	maxSelectableMatches: number
+	maxSelectableMatches: number,
 }
 
 export interface NimGame {
 	gameRules: NimGameRules,
+	computerDifficulty: NimGameDifficulty,
 	currentGameState: NimGameState,
 	currentRound: number,
 	currentPlayer: Player,
+	lastAmountTaken: number,
 	winner: Player|null,
 	numMatchesLeft: number,
 	playerStats: {[p in Player]: NimGamePlayerStats}

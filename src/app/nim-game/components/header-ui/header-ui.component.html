@@ -1,0 +1,24 @@
+<div class="fixed z-50 top-2 right-2 flex flex-row gap-4">
+	<app-nim-game-instructions buttonSize="small"></app-nim-game-instructions>
+	<button
+	type="button"
+	title="exit game"
+	class="btn btn-lg btn-circle btn-ghost"
+	(click)="exitConfirmation.showModal()">✕</button>
+
+	<dialog #exitConfirmation class="modal modal-bottom sm:modal-middle backdrop-blur">
+		<div class="modal-box">
+			<form method="dialog">
+				<button title="close" class="btn btn-circle btn-ghost absolute right-2 top-2">✕</button>
+			</form>
+			<h2 class="font-bold text-4xl mt-0 mb-4 me-16">Exit Game?</h2>
+			<div class="flex flex-col gap-4">
+				<p>Do you want to quit the current game and return to the start screen?</p>
+				<button type="button" class="btn btn-neutral btn-lg" (click)="gameService.endGame()">Exit Game</button>
+			</div>
+		</div>
+		<form method="dialog" class="modal-backdrop">
+			<button>close</button>
+		</form>
+	</dialog>
+</div>

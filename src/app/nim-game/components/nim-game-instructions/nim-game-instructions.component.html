@@ -1,0 +1,25 @@
+<ng-container [ngSwitch]="buttonSize">
+	<ng-container *ngSwitchCase="'small'">
+		<button class="btn btn-ghost btn-lg btn-circle" title="show instructions" type="button" (click)="dialog.showModal()">?</button>
+	</ng-container>
+	<ng-container *ngSwitchDefault>
+		<button class="btn btn-lg btn-ghost" type="button" title="show instructions" (click)="dialog.showModal()">Show Instructions</button>
+	</ng-container>
+</ng-container>
+
+<dialog #dialog class="modal modal-bottom sm:modal-middle backdrop-blur">
+	<div class="modal-box">
+		<form method="dialog">
+      <button title="close" class="btn btn-circle btn-ghost absolute right-2 top-2">✕</button>
+    </form>
+		<h2 class="font-bold text-4xl mt-0 mb-4 me-16">Instructions</h2>
+		<ol class="list-disc">
+			<li class="ms-6">You are playing against the computer.</li>
+			<li class="ms-6">Take turns in removing 1, 2 or 3 matches from the stack.</li>
+			<li class="ms-6">Whoever removes the last match, loses the game.</li>
+		</ol>
+	</div>
+	<form method="dialog" class="modal-backdrop">
+		<button>close</button>
+	</form>
+</dialog>

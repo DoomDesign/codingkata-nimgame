@@ -1,22 +1,60 @@
-<ng-container *ngIf="(gameData$ | async) as gameData">
-	<ol *ngIf="{max: (maxSelectableAmount$ | async) ?? 1, selected: (selectedAmount$ | async) ?? 1, matches: (numMatches$ | async)} as currRoundData">
-			<li *ngFor="let m of currRoundData.matches; index as i">
-				<app-nim-single-match
-				[selectable]="(gameData$ | async)?.currentPlayer === ePlayer.Player && i >= (gameData.numMatchesLeft - currRoundData.max) && i < (gameData.numMatchesLeft)"
-				[selected]="i >= (gameData.numMatchesLeft - currRoundData.selected) && i < (gameData.numMatchesLeft)"
-				[taken]="i >= (gameData.numMatchesLeft)"
-				(onSelect)="setSelectedAmount((gameData.numMatchesLeft) - i)"
-				></app-nim-single-match>
-			</li>
+<app-header-ui></app-header-ui>
+<div class="h-screen w-screen px-8 flex flex-col items-center">
+	<div class="h-[10vh] lg:h-[15vh] flex items-end overflow-clip">
+		<app-nim-game-player-ui class="block -scale-y-100 -translate-y-1/3" [playerToDisplay]="ePlayer.Computer"></app-nim-game-player-ui>
+	</div>
+	<div class="flex-1 w-full flex flex-col items-center justify-center gap-16">
+		<ng-container *ngIf="(gameData$ | async) as gameData">
+			<ol
+			*ngIf="{
+				max: (maxSelectableAmount$ | async) ?? 1,
+				selected: (selectedAmount$ | async) ?? 1,
+				matches: (numMatches$ | async)
+			} as currRoundData"
+			class="w-full flex flex-row flex-wrap gap-0 justify-center"
+			[@list]="gameData.numMatchesLeft"
+			>
+				<li
+				*ngFor="let m of currRoundData.matches; index as i"
+				class="peer"
+				[ngClass]="{
+					'lg:tooltip lg:tooltip-bottom': (gameData$ | async)?.currentPlayer === ePlayer.Player && i >= (gameData.numMatchesLeft - currRoundData.max) && i < (gameData.numMatchesLeft)
+				}"
+				[attr.data-tip]="'Click to select ' + ((gameData.numMatchesLeft - i) | i18nPlural:itemPluralMapping['match'])">
+					<app-nim-single-match
+					class="block"
+					[selectable]="(gameData$ | async)?.currentPlayer === ePlayer.Player && i >= (gameData.numMatchesLeft - currRoundData.max) && i < (gameData.numMatchesLeft)"
+					[selected]="i >= (gameData.numMatchesLeft - currRoundData.selected) && i < (gameData.numMatchesLeft)"
+					[taken]="i >= (gameData.numMatchesLeft)"
+					(onSelect)="setSelectedAmount((gameData.numMatchesLeft) - i)"
+					></app-nim-single-match>
+				</li>
+			</ol>
 
-	</ol>
-	<ng-container [ngSwitch]="(gameData$ | async)?.currentPlayer">
-		<ng-container *ngSwitchCase="ePlayer.Computer">
-			Wait for the computer to finish this round&hellip;
-		</ng-container>
-		<ng-container *ngSwitchCase="ePlayer.Player">
-			<button type="button" (click)="submitSelection()">Submit Selection</button>
-		</ng-container>
-	</ng-container>
+			<div class="flex flex-col gap-8" [ngSwitch]="gameData?.currentPlayer">
+				<div class="flex flex-wrap flex-row gap-2 items-center" *ngSwitchCase="ePlayer.Computer">
+					<span>Wait for the computer to finish his move</span>
+					<span class="loading loading-dots loading-xs"></span>
+				</div>
+				<div *ngSwitchCase="ePlayer.Player">
+					Select 1, 2 or 3 matches from the stack!
+				</div>
+				<button
+				*ngIf="(selectedAmount$ | async) as amount"
+				class="btn btn-lg btn-neutral"
+				[class.invisible]="gameData?.currentPlayer === ePlayer.Computer"
+				type="button"
+				(click)="submitSelection()"
+				[disabled]="amount <= 0">
+					Take {{amount | i18nPlural: itemPluralMapping['match']}}
+				</button>
+			</div>
 
-</ng-container>
+		</ng-container>
+	</div>
+	<div class="h-[10vh] lg:h-[15vh] overflow-clip">
+		<app-nim-game-player-ui class="block translate-y-1/3" [playerToDisplay]="ePlayer.Player">
+		</app-nim-game-player-ui>
+	</div>
+
+</div>
