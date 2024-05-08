@@ -8,7 +8,7 @@
 4. Choose a difficulty and play the game!
 
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 16.2.12.
+This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 16.2.12, using Node 20.11.1.
 
 ### Development server
 
