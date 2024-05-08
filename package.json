@@ -1,6 +1,7 @@
 {
   "name": "codingkata-nimgame",
-  "version": "0.0.0",
+  "version": "1.0.0",
+	"author": "Dominik Schlipper",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
