@@ -220,6 +220,7 @@ export class NimGameService {
 
 				if(gameData.computerDifficulty === NimGameDifficulty.Hard) {
 					// calculate the optimum amount of matches to take
+					// (this algorithm was not developed by me)
 					matchesToTake = Math.max(_minMatches , ((_matchesLeft % (_maxMatches + _minMatches)) + _maxMatches) % (_maxMatches + _minMatches));
 				}
 
