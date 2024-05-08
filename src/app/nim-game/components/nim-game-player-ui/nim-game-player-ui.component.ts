@@ -4,6 +4,9 @@ import { NimGameService } from '../../services/nim-game.service';
 import { Observable, combineLatest, map, of } from 'rxjs';
 import { listStaggerChildren } from '../../animations';
 
+/**
+ * displays the taken matches for a given player
+ */
 @Component({
   selector: 'app-nim-game-player-ui',
   templateUrl: './nim-game-player-ui.component.html',

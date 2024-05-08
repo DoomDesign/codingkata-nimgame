@@ -32,14 +32,6 @@ export class NimGameActiveGameComponent implements OnInit, OnDestroy {
 	private _selectedAmount: BehaviorSubject<number> = new BehaviorSubject<number>(0);
 	public selectedAmount$: Observable<number> = this._selectedAmount.asObservable();
 
-	public itemPluralMapping = {
-		'match': {
-			'=0': '0 matches',
-			'=1': '1 match',
-			'other': '# matches'
-		}
-	};
-
 	public numMatches$: Observable<Array<null>> = this.gameData$.pipe(
 		map(gameData => new Array( gameData.gameRules.numTotalMatches ).fill(null))
 	)
@@ -73,11 +65,6 @@ export class NimGameActiveGameComponent implements OnInit, OnDestroy {
 	public submitSelection() {
 
 		const _selectedAmount = this._selectedAmount.getValue();
-
-		if(_selectedAmount === null) {
-			// TODO: error message
-			return;
-		}
 
 		this.gameService.endCurrentRound(_selectedAmount);
 	}

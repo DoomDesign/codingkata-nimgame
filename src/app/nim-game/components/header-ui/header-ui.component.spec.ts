@@ -2,6 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { HeaderUIComponent } from './header-ui.component';
 import { NimGameInstructionsComponent } from '../nim-game-instructions/nim-game-instructions.component';
+import { I18nPluralPipe } from '@angular/common';
 
 describe('HeaderUIComponent', () => {
   let component: HeaderUIComponent;
@@ -12,6 +13,9 @@ describe('HeaderUIComponent', () => {
       declarations: [
 				HeaderUIComponent,
 				NimGameInstructionsComponent
+			],
+			providers: [
+				I18nPluralPipe
 			]
     });
     fixture = TestBed.createComponent(HeaderUIComponent);

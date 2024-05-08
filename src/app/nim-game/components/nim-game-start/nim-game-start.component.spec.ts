@@ -4,6 +4,7 @@ import { NimGameStartComponent } from './nim-game-start.component';
 import { DifficultySelectorComponent } from '../difficulty-selector/difficulty-selector.component';
 import { NimGameInstructionsComponent } from '../nim-game-instructions/nim-game-instructions.component';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { I18nPluralPipe } from '@angular/common';
 
 describe('NimGameStartComponent', () => {
   let component: NimGameStartComponent;
@@ -18,6 +19,9 @@ describe('NimGameStartComponent', () => {
 				NimGameStartComponent,
 				DifficultySelectorComponent,
 				NimGameInstructionsComponent
+			],
+			providers: [
+				I18nPluralPipe
 			]
     });
     fixture = TestBed.createComponent(NimGameStartComponent);

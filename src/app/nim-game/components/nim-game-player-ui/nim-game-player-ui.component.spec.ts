@@ -2,6 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { NimGamePlayerUiComponent } from './nim-game-player-ui.component';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { I18nPluralPipe } from '@angular/common';
 
 describe('NimGamePlayerUiComponent', () => {
   let component: NimGamePlayerUiComponent;
@@ -12,7 +13,10 @@ describe('NimGamePlayerUiComponent', () => {
       imports: [
 				NoopAnimationsModule
 			],
-      declarations: [NimGamePlayerUiComponent]
+      declarations: [NimGamePlayerUiComponent],
+			providers: [
+				I18nPluralPipe
+			]
     });
     fixture = TestBed.createComponent(NimGamePlayerUiComponent);
     component = fixture.componentInstance;

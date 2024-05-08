@@ -4,6 +4,9 @@ import { NimGame } from '../../interfaces/nim-game';
 import { NimGameService } from '../../services/nim-game.service';
 import { trigger, transition, style, animate } from '@angular/animations';
 
+/**
+ * renders a single match, the main item of the game
+ */
 @Component({
   selector: 'app-nim-single-match',
   templateUrl: './nim-single-match.component.html',

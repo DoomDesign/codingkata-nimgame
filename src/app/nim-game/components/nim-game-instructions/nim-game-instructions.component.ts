@@ -1,5 +1,8 @@
 import { Component, ElementRef, HostListener, Input, ViewChild } from '@angular/core';
 
+/**
+ * provides a button and a dialog to display the game instructions
+ */
 @Component({
   selector: 'app-nim-game-instructions',
   templateUrl: './nim-game-instructions.component.html',

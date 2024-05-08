@@ -1,0 +1,10 @@
+<div
+*ngIf="!!alert"
+class="alert"
+[ngClass]="{
+	'alert-info': alert.role === eNimGameAlertRole.Info,
+	'alert-success': alert.role === eNimGameAlertRole.Success,
+	'alert-error': alert.role === eNimGameAlertRole.Error
+}">
+	<span>{{alert.text}}</span>
+</div>

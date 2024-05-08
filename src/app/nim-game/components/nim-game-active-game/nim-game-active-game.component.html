@@ -20,7 +20,7 @@
 				[ngClass]="{
 					'lg:tooltip lg:tooltip-bottom': (gameData$ | async)?.currentPlayer === ePlayer.Player && i >= (gameData.numMatchesLeft - currRoundData.max) && i < (gameData.numMatchesLeft)
 				}"
-				[attr.data-tip]="'Click to select ' + ((gameData.numMatchesLeft - i) | i18nPlural:itemPluralMapping['match'])">
+				[attr.data-tip]="'Click to select ' + ((gameData.numMatchesLeft - i) | i18nPlural:gameService.itemPluralMapping['match'])">
 					<app-nim-single-match
 					class="block"
 					[selectable]="(gameData$ | async)?.currentPlayer === ePlayer.Player && i >= (gameData.numMatchesLeft - currRoundData.max) && i < (gameData.numMatchesLeft)"
@@ -46,7 +46,7 @@
 				type="button"
 				(click)="submitSelection()"
 				[disabled]="amount <= 0">
-					Take {{amount | i18nPlural: itemPluralMapping['match']}}
+					Take {{amount | i18nPlural: gameService.itemPluralMapping['match']}}
 				</button>
 			</div>
 

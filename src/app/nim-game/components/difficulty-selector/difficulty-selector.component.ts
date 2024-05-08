@@ -2,6 +2,9 @@ import { Component, inject } from '@angular/core';
 import { NimGameDifficulty } from '../../interfaces/nim-game';
 import { NimGameService } from '../../services/nim-game.service';
 
+/**
+ * renders a switch to change the games difficulty
+ */
 @Component({
   selector: 'app-difficulty-selector',
   templateUrl: './difficulty-selector.component.html',

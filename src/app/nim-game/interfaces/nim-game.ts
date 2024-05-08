@@ -35,3 +35,14 @@ export interface NimGame {
 	numMatchesLeft: number,
 	playerStats: {[p in Player]: NimGamePlayerStats}
 }
+
+export enum NimGameAlertRole {
+	Info = 'INFO',
+	Success = 'SUCCESS',
+	Error = 'ERROR'
+}
+export interface NimGameAlert {
+	role: NimGameAlertRole,
+	text: string,
+	timeoutDuration: number
+}

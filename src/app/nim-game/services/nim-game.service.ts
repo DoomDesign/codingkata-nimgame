@@ -1,12 +1,12 @@
-import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, delay, filter, takeWhile } from 'rxjs';
-import { NimGame, NimGameDifficulty, NimGameState, Player } from '../interfaces/nim-game';
+import { Injectable, inject } from '@angular/core';
+import { BehaviorSubject, Observable, ReplaySubject, Subject, delay, filter, takeWhile } from 'rxjs';
+import { NimGame, NimGameAlert, NimGameAlertRole, NimGameDifficulty, NimGameState, Player } from '../interfaces/nim-game';
+import { I18nPluralPipe } from '@angular/common';
 
 @Injectable({
   providedIn: 'root'
 })
 export class NimGameService {
-
 
 	private _defaultNimGameData: NimGame = {
 		gameRules: {
@@ -31,13 +31,27 @@ export class NimGameService {
 		}
 	}
 
-
 	private _gameData !: BehaviorSubject<NimGame>;
+
+	public readonly itemPluralMapping = {
+		'match': {
+			'=0': '0 matches',
+			'=1': '1 match',
+			'other': '# matches'
+		}
+	};
+
+	private _alerts: ReplaySubject<NimGameAlert> = new ReplaySubject<NimGameAlert>();
+
+	private _pluralPipe: I18nPluralPipe = inject(I18nPluralPipe);
 
 	constructor() {
 		this.resetGame();
 	}
 
+  /**
+	 * Sets the game data back to the default initial values
+	 */
 	public resetGame() {
 		// use a structured clone to remove any reference to child objects.
 		// else, the "playerStats" child object would keep its values after each game
@@ -56,6 +70,9 @@ export class NimGameService {
 		})
 	}
 
+	/**
+	 * sets the game state to running and lets the computer player wait for his turns
+	 */
 	public startGame() {
 		this.updateGame({
 			currentGameState: NimGameState.Running
@@ -64,6 +81,9 @@ export class NimGameService {
 		this.initComputerPlayer();
 	}
 
+	/**
+	 * updates the global game state
+	 */
 	private updateGame(updatedGameData: Partial<NimGame>) {
 		let _currGameData = this._gameData.getValue();
 
@@ -71,10 +91,11 @@ export class NimGameService {
 			..._currGameData,
 			...updatedGameData
 		});
-
-		console.log({gameData: this._gameData.getValue()});
 	}
 
+	/**
+	 * returns the global game data as an Observable
+	 */
 	public getGameData$(): Observable<NimGame> {
 		return this._gameData.asObservable();
 	}
@@ -85,15 +106,40 @@ export class NimGameService {
 		return _currGameData.numMatchesLeft;
 	}
 
+	/**
+	 * finishes a turn and takes away the given amount of matches from the stack.
+	 * checks for game over conditions and sets the game to a finished state, if true
+	 */
 	public endCurrentRound(numMatchesToTake: number) {
-		// TODO: check for valid amount with numMatchesLeft AND maxSelectableMatches
+
 		if(!this.isValidNumMatchesToTake(numMatchesToTake)) {
-			// TODO: display error message
-			console.error("Invalid number of selected matches");
+			this.addAlert({
+				role: NimGameAlertRole.Error,
+				text: 'Invalid amount of matches',
+				timeoutDuration: 5000
+			})
+
 			return;
 		}
 
 		const _updatedGameData = { ...this._gameData.getValue() };
+
+		let infoText: string;
+
+		switch (_updatedGameData.currentPlayer) {
+			case Player.Player:
+				infoText = `You took ${this._pluralPipe.transform(numMatchesToTake, this.itemPluralMapping['match'])} from the stack.`
+				break;
+				case Player.Computer:
+				infoText = `The computer took ${this._pluralPipe.transform(numMatchesToTake, this.itemPluralMapping['match'])} from the stack.`
+				break;
+		}
+
+		this.addAlert({
+			role: NimGameAlertRole.Info,
+			text: infoText,
+			timeoutDuration: 5000
+		});
 
 		_updatedGameData.lastAmountTaken = numMatchesToTake;
 
@@ -118,6 +164,9 @@ export class NimGameService {
 
 	}
 
+	/**
+	 * validates the given amount of matches against various rules and requirements
+	 */
 	private isValidNumMatchesToTake(numMatchesToTake: number): boolean {
 		const _currGameData = this._gameData.getValue();
 
@@ -143,15 +192,22 @@ export class NimGameService {
 		return _noMatchesLeft;
 	}
 
+	/**
+	 * returns the opposite player
+	 */
 	private getOtherPlayer(currentPlayer: Player): Player {
 		return currentPlayer === Player.Player ? Player.Computer : Player.Player;
 	}
 
+	/**
+	 * sets up a subscription to the game data and executes when it's the computers turn
+	 */
 	private initComputerPlayer() {
 		this.getGameData$().pipe(
 			takeWhile(gameData => gameData.currentGameState === NimGameState.Running),
 			filter(gameData => gameData.currentPlayer === Player.Computer),
 			// this delay solves a race condition and lets the player rest for a bit
+			// it also makes the computer seem to require some time to think
 			delay(2000)
 		).subscribe({
 			next: (gameData) => {
@@ -168,8 +224,21 @@ export class NimGameService {
 				}
 
 				// easy mode/fallback: choose randomly between the min and the max amount of matches
+				const getRandomAmount = () => Math.floor( Math.random() * (_maxMatches - gameData.gameRules.minSelectableMatches + 1) + gameData.gameRules.minSelectableMatches );
+
 				if(matchesToTake === 0) {
-					matchesToTake = Math.floor( Math.random() * (_maxMatches - gameData.gameRules.minSelectableMatches + 1) + gameData.gameRules.minSelectableMatches );
+					matchesToTake = getRandomAmount();
+				}
+
+				// validate the amount; if invalid, fall back to a random amount
+				let isValidAmount: boolean = this.isValidNumMatchesToTake(matchesToTake);
+				while(isValidAmount === false) {
+					let newAmount = getRandomAmount();
+					isValidAmount = this.isValidNumMatchesToTake(newAmount);
+
+					if(isValidAmount === true) {
+						matchesToTake = newAmount;
+					}
 				}
 
 				this.endCurrentRound(matchesToTake);
@@ -177,7 +246,18 @@ export class NimGameService {
 		})
 	}
 
+	/**
+	 * ends the current game, returning the player to the start screen
+	 */
 	public endGame() {
 		this.resetGame();
+	}
+
+	public getAlerts$(): Observable<NimGameAlert> {
+		return this._alerts.asObservable();
+	}
+
+	public addAlert(alert: NimGameAlert) {
+		this._alerts.next(alert);
 	}
 }

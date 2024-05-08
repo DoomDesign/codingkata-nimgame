@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, I18nPluralPipe } from '@angular/common';
 import { NimGameComponent } from './components/nim-game/nim-game.component';
 import { NimGameStartComponent } from './components/nim-game-start/nim-game-start.component';
 import { NimGameActiveGameComponent } from './components/nim-game-active-game/nim-game-active-game.component';
@@ -10,6 +10,8 @@ import { NimGamePlayerUiComponent } from './components/nim-game-player-ui/nim-ga
 import { NimGameInstructionsComponent } from './components/nim-game-instructions/nim-game-instructions.component';
 import { HeaderUIComponent } from './components/header-ui/header-ui.component';
 import { DifficultySelectorComponent } from './components/difficulty-selector/difficulty-selector.component';
+import { AlertDisplayComponent } from './components/alert-display/alert-display.component';
+import { SingleAlertComponent } from './components/single-alert/single-alert.component';
 
 
 
@@ -21,9 +23,11 @@ import { DifficultySelectorComponent } from './components/difficulty-selector/di
 		NimGameEndComponent,
 		NimSingleMatchComponent,
 		NimGamePlayerUiComponent,
-  NimGameInstructionsComponent,
-  HeaderUIComponent,
-  DifficultySelectorComponent
+		NimGameInstructionsComponent,
+		HeaderUIComponent,
+		DifficultySelectorComponent,
+		AlertDisplayComponent,
+		SingleAlertComponent
 	],
 	exports: [
 		NimGameComponent
@@ -32,7 +36,8 @@ import { DifficultySelectorComponent } from './components/difficulty-selector/di
     CommonModule,
   ],
 	providers: [
-		NimGameService
+		NimGameService,
+		I18nPluralPipe
 	]
 })
 export class NimGameModule { }

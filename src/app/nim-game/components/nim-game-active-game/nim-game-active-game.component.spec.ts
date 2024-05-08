@@ -6,6 +6,7 @@ import { HeaderUIComponent } from '../header-ui/header-ui.component';
 import { NimGamePlayerUiComponent } from '../nim-game-player-ui/nim-game-player-ui.component';
 import { NimGameInstructionsComponent } from '../nim-game-instructions/nim-game-instructions.component';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { I18nPluralPipe } from '@angular/common';
 
 describe('NimGameActiveGameComponent', () => {
   let component: NimGameActiveGameComponent;
@@ -22,6 +23,9 @@ describe('NimGameActiveGameComponent', () => {
 				HeaderUIComponent,
 				NimGamePlayerUiComponent,
 				NimGameInstructionsComponent
+			],
+			providers: [
+				I18nPluralPipe
 			]
     });
     fixture = TestBed.createComponent(NimGameActiveGameComponent);

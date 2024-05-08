@@ -3,6 +3,9 @@ import { Observable } from 'rxjs';
 import { Player, NimGame } from '../../interfaces/nim-game';
 import { NimGameService } from '../../services/nim-game.service';
 
+/**
+ * renders a dialog with the end game result
+ */
 @Component({
   selector: 'app-nim-game-end',
   templateUrl: './nim-game-end.component.html',

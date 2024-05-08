@@ -2,6 +2,9 @@ import { Component, inject } from '@angular/core';
 import { NimGameService } from '../../services/nim-game.service';
 import { animate, query, stagger, style, transition, trigger } from '@angular/animations';
 
+/**
+ * the start screen of the game
+ */
 @Component({
   selector: 'app-nim-game-start',
   templateUrl: './nim-game-start.component.html',
